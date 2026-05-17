@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+    <ModInfo>
+        <Name value="ZipTestMod"/>
+        <Description value="这是一个ZIP形式测试模组"/>
+    </ModInfo>
+</xml>

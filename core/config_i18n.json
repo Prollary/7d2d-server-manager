@@ -1,0 +1,322 @@
+{
+  "ServerName": {
+    "label": "服务器名称",
+    "desc": "在服务器浏览器中显示的服务器名称。"
+  },
+  "ServerDescription": {
+    "label": "服务器描述",
+    "desc": "在服务器浏览器中显示的服务器描述文本。"
+  },
+  "ServerWebsiteURL": {
+    "label": "服务器网站URL",
+    "desc": "服务器的主页或讨论网站的URL。"
+  },
+  "ServerPassword": {
+    "label": "服务器密码",
+    "desc": "进入服务器所需的密码（为空表示没有密码）。"
+  },
+  "ServerLoginConfirmationText": {
+    "label": "登录确认文本",
+    "desc": "玩家在登录时必须确认看到的提示文本信息。"
+  },
+  "ServerPort": {
+    "label": "服务器端口",
+    "desc": "服务器将要监听的端口。"
+  },
+  "ServerVisibility": {
+    "label": "服务器可见性",
+    "desc": "2 = 公开, 1 = 仅给朋友显示, 0 = 未列出。"
+  },
+  "ServerDisabledNetworkProtocols": {
+    "label": "禁用网络协议",
+    "desc": "以逗号分隔的网络协议列表。可能的值：LiteNetLib, SteamNetworking"
+  },
+  "ServerMaxWorldTransferSpeedKiBs": {
+    "label": "最大世界传输速度 (KiB/s)",
+    "desc": "最大世界传输速度。数值为千字节/秒(KiB/s)。"
+  },
+  "ServerMaxPlayerCount": {
+    "label": "最大玩家数",
+    "desc": "可以同时游戏的最大玩家数。"
+  },
+  "ServerReservedSlots": {
+    "label": "保留栏位",
+    "desc": "保留供管理员等使用的玩家插槽数量。"
+  },
+  "ServerReservedSlotsPermission": {
+    "label": "保留栏位所需权限",
+    "desc": "使用保留插槽所需的权限级别。"
+  },
+  "ServerAdminSlots": {
+    "label": "管理员栏位",
+    "desc": "管理员加入的插槽数，超出最大玩家数后管理员仍可进入。"
+  },
+  "ServerAdminSlotsPermission": {
+    "label": "管理员栏位所需权限",
+    "desc": "使用管理员插槽所需的权限级别。"
+  },
+  "WebDashboardEnabled": {
+    "label": "启用Web Dashboard",
+    "desc": "启用或禁用 Alloc 的控制网页控制台（如果适用）。"
+  },
+  "WebDashboardPort": {
+    "label": "Web Dashboard 端口",
+    "desc": "Web Dashboard 监听的端口。"
+  },
+  "WebDashboardUrl": {
+    "label": "Web Dashboard URL",
+    "desc": "配置Web控制台的外部URL名称。"
+  },
+  "EnableMapRendering": {
+    "label": "启用地图渲染",
+    "desc": "启用后可以在网页端提供俯视视角地图渲染。"
+  },
+  "TelnetEnabled": {
+    "label": "启用 Telnet",
+    "desc": "启用 Telnet 服务以允许从远程连接执行命令。"
+  },
+  "TelnetPort": {
+    "label": "Telnet 端口",
+    "desc": "Telnet 服务监听的端口。"
+  },
+  "TelnetPassword": {
+    "label": "Telnet 密码",
+    "desc": "访问 Telnet 接口所需的密码（无密码情况下无安全保护）。"
+  },
+  "TelnetFailedLoginLimit": {
+    "label": "Telnet失败尝试限制",
+    "desc": "在某个IP被拉黑前，允许密码输入错误的次数。"
+  },
+  "TelnetFailedLoginsBlocktime": {
+    "label": "Telnet拉黑时间",
+    "desc": "因登录失败多次而被拉黑的封禁时长（秒）。"
+  },
+  "TerminalWindowEnabled": {
+    "label": "启用终端窗口",
+    "desc": "仅服务端可生效：弹出一个终端窗口记录输出（适用于 Windows）。"
+  },
+  "AdminFileName": {
+    "label": "管理员配置文件名称",
+    "desc": "存放服务器管理员权限文件的名字（通常为 serveradmin.xml）。"
+  },
+  "UserDataFolder": {
+    "label": "数据存放文件夹",
+    "desc": "游戏数据的存放文件夹。默认在用户的App Data或者HOME目下下。"
+  },
+  "SaveGameFolder": {
+    "label": "存档文件夹",
+    "desc": "存储世界存档的绝对路径（可选使用）。"
+  },
+  "GameWorld": {
+    "label": "游戏世界",
+    "desc": "要加载的地图名称。可以是 Navezgane，Pregen 等，或者是通过 RWG 生成的地图。"
+  },
+  "WorldGenSeed": {
+    "label": "世界生成种子",
+    "desc": "用于如果生成新地图时的基础种子字符串。"
+  },
+  "WorldGenSize": {
+    "label": "世界生存尺寸",
+    "desc": "生成世界的尺寸。官方建议最大可设 10240。"
+  },
+  "GameName": {
+    "label": "游戏存档名称",
+    "desc": "当前地图上的具体存档名称（也会作为文件夹名）。"
+  },
+  "GameDifficulty": {
+    "label": "游戏难度",
+    "desc": "难度，0=最简单（清道夫），1=容易（拾荒者），2=普通（冒险者），3=困难（游牧民），4=非常困难（生存者），5=极度困难（绝地武士/疯狂）。"
+  },
+  "ZombiesRun": {
+    "label": "僵尸奔跑",
+    "desc": "普通僵尸速度：0=默认（白天走/夜晚跑），1=从不奔跑，2=总是奔跑，3=冲刺，4=梦魇速度。"
+  },
+  "ZombiesRunNight": {
+    "label": "僵尸夜晚奔跑",
+    "desc": "夜晚时普通僵尸速度：同上。"
+  },
+  "ZombiesRunFeral": {
+    "label": "残暴僵尸奔跑",
+    "desc": "野性残暴僵尸速度：同上。"
+  },
+  "ZombiesRunBloodMoon": {
+    "label": "血月僵尸奔跑",
+    "desc": "血月期间僵尸速度：同上。"
+  },
+  "BuildCreate": {
+    "label": "创造/作弊模式",
+    "desc": "启用允许使用作弊模式（开启创造菜单）。"
+  },
+  "DayNightLength": {
+    "label": "昼夜时间长度(分钟)",
+    "desc": "每天的总计现实时间（分钟）。"
+  },
+  "DayLightLength": {
+    "label": "白昼时长(小时)",
+    "desc": "游戏中白天所占的游戏时间（按24小时算，比如18小时则夜晚只有6小时）。"
+  },
+  "DropOnDeath": {
+    "label": "死亡惩罚",
+    "desc": "0=不掉落, 1=掉落所有, 2=掉落工具栏, 3=掉落背包, 4=全部销毁。"
+  },
+  "DropOnQuit": {
+    "label": "退出惩罚",
+    "desc": "退出游戏时掉落物。与死亡惩罚数值一样。"
+  },
+  "BloodMoonEnemyCount": {
+    "label": "血月僵尸数量",
+    "desc": "每次血月时，每个玩家周围生成的最大僵尸数目（建议8~16）。"
+  },
+  "BloodMoonWarning": {
+    "label": "血月时间告警",
+    "desc": "血月开始时的固定游戏时间报警提示(例如早晨 8点)。"
+  },
+  "EnemySpawnMode": {
+    "label": "僵尸生成",
+    "desc": "是否允许生成敌对生物。"
+  },
+  "EnemyDifficulty": {
+    "label": "敌人难度",
+    "desc": "0 = 正常, 1 = 凶猛。"
+  },
+  "BlockDamagePlayer": {
+    "label": "玩家对实体的方块伤害",
+    "desc": "玩家对方块的伤害倍率（预设是100%）。"
+  },
+  "BlockDamageAI": {
+    "label": "AI对方块的伤害",
+    "desc": "僵尸AI对方块的伤害倍率（预设是100%）。"
+  },
+  "BlockDamageAIBM": {
+    "label": "血月AI对方块的伤害",
+    "desc": "血月中，僵尸AI对方块的伤害（预设是100%）。"
+  },
+  "XPMultiplier": {
+    "label": "经验倍率",
+    "desc": "获取经验值的百分比，100为主流，200代表2倍经验。"
+  },
+  "PlayerSafeZoneLevel": {
+    "label": "新手安全等级保护",
+    "desc": "若玩家在这等级以下，可不会产生严重掉落等后果（如5表示5级以内）。"
+  },
+  "PlayerSafeZoneHours": {
+    "label": "新手保护游戏小时数",
+    "desc": "新手上线所受的同等级保护机制对应的游戏小时（非现实小时）。"
+  },
+  "EACEnabled": {
+    "label": "启用 EAC (小蓝熊)",
+    "desc": "启用 EasyAntiCheat 防作弊。"
+  },
+  "HideCommandExecutionLog": {
+    "label": "隐藏命令执行日志",
+    "desc": "设为0在日志中显示运行的命令输入，设为1隐藏(提升性能和日志可读性)。"
+  },
+  "MaxUncoveredMapChunksPerPlayer": {
+    "label": "最高探图块大小",
+    "desc": "每个玩家能够在雷达等设备上一次看到的最大地图块资源数量(限制过高占用大)。"
+  },
+  "PersistentPlayerProfiles": {
+    "label": "强制玩家配置文件名规则",
+    "desc": "开启后将只能通过已经创建或选择的外观人物登录等。"
+  },
+  "MaxSpawnedZombies": {
+    "label": "最大生成僵尸数",
+    "desc": "地图内可生成的最大僵尸总数（如果服务器性能不好，建议降低这个数）。"
+  },
+  "MaxSpawnedAnimals": {
+    "label": "最大生成动物数",
+    "desc": "地图内可生成的最大动物总数。"
+  },
+  "BedrollDeadZoneSize": {
+    "label": "床边安全范围",
+    "desc": "睡袋/床部署后，四周多大方格内不会刷任何僵尸实体。"
+  },
+  "BedrollExpiryTime": {
+    "label": "床铺有效期(现实天)",
+    "desc": "睡袋经过多少现实天不活动就会失效失效（通常是45）。"
+  },
+  "LootAbundance": {
+    "label": "搜刮物丰富度",
+    "desc": "箱子容器战利品获取的整体爆率倍数，以%为单位例如（100或200）。"
+  },
+  "LootRespawnDays": {
+    "label": "搜刮物刷新天数",
+    "desc": "箱子内物资重新刷新的游戏内天数（为空的箱子或被清空的）。"
+  },
+  "LandClaimSize": {
+    "label": "领地石尺寸",
+    "desc": "玩家摆放的领地石将能覆盖多少个方块范围？(比如 41 或 51)。"
+  },
+  "LandClaimCount": {
+    "label": "领地石数量",
+    "desc": "每位玩家的最大允许土地使用权。"
+  },
+  "LandClaimDeadZone": {
+    "label": "领地石安全间距",
+    "desc": "放置领地石之间所需的最小安全方块距离。"
+  },
+  "LandClaimExpiryTime": {
+    "label": "领地石有效时间",
+    "desc": "非活跃状态多少天后领地石失效失效？"
+  },
+  "LandClaimDecayMode": {
+    "label": "领地石衰退模式",
+    "desc": "0 = 慢(线性)，1 = 快(指数)，2 = 无(完全保护，直到索赔到期)。"
+  },
+  "LandClaimOnlineDurabilityModifier": {
+    "label": "玩家在线时领地石硬币度倍数",
+    "desc": "如果有领地石且玩家在线，其中硬度的多少倍数。0 表示不可摧毁。"
+  },
+  "LandClaimOfflineDurabilityModifier": {
+    "label": "玩家离线时领地石硬币度倍数",
+    "desc": "如果有领地石但玩家不在线，硬度的倍率。0 为不可摧毁。"
+  },
+  "LandClaimOfflineDelay": {
+    "label": "离线状态生效延迟",
+    "desc": "玩家注销后土地所有权区域硬度从联机转换到脱机的分钟数。默认值为0。"
+  },
+  "PartySharedKillRange": {
+    "label": "团队共享击杀经验的距离",
+    "desc": "如果你组队了，在此距离内的击杀，队友也会得全额经验。"
+  },
+  "PlayerKillingMode": {
+    "label": "同组玩家击杀模式",
+    "desc": "0=不杀自己人、1=仅攻击同盟内可以击杀、2=仅可击杀除自己以外任何人、3=PVP（所有玩家皆可）。"
+  },
+  "AirDropFrequency": {
+    "label": "空投频率(小时)",
+    "desc": "空投发生的相隔游戏内时间（以小时为单位，默认 72 即 3 天一投）。"
+  },
+  "AirDropMarker": {
+    "label": "空投坐标标记",
+    "desc": "为掉落的空投箱在指南针或全能地图上标注其位置。"
+  },
+  "MaxChunkAge": {
+    "label": "地图区块的内存过期天数",
+    "desc": "超过此天数若玩家未访问等，系统将从内存/空间里重置此区块。"
+  },
+  "BloodMoonFrequency": {
+    "label": "血月频率(天数)",
+    "desc": "多常发生一次血月僵尸狂潮？默认：7天。"
+  },
+  "BloodMoonRange": {
+    "label": "血月随机浮动区间",
+    "desc": "允许上下浮动的血月天数以提供惊喜（默认0，意味着准确为第7天）。"
+  },
+  "Region": {
+    "label": "地区服务器选项",
+    "desc": "你在哪个地方部署（如 Asia, NorthAmerica, Europe 等）。"
+  },
+  "Language": {
+    "label": "语言偏好",
+    "desc": "服务器沟通的优先预设语言区域（如 zh-cn, en 等）。"
+  },
+  "TwitchServerPermission": {
+    "label": "启用 Twitch 集成功能",
+    "desc": "玩家在游戏中允许调用 Twitch 权限数值。90是通常选项。"
+  },
+  "TwitchBloodMoonAllowed": {
+    "label": "允许 Twitch 触发血月",
+    "desc": "是否让弹幕可以在任何时候引发玩家们的血月之灾行为等。"
+  }
+}

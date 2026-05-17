@@ -1,0 +1,14 @@
+# Python 虚拟环境
+venv/
+.venv/
+env/
+
+# 构建输出
+dist/
+build/
+*.exe
+
+# 其他常见忽略项
+__pycache__/
+*.pyc
+.env

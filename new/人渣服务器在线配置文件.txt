@@ -1,0 +1,179 @@
+[/Script/SCUM.SCUMGameSession]
+;===================== 【通用设置】=====================
+配置文件名称ServerSettings.ini
+scum.ServerName=我的人渣服务器                  ; 服务器名称
+scum.ServerDescription=最全汉化配置服务器        ; 服务器描述
+scum.ServerPassword=                             ; 服务器密码（空=无密码）
+scum.AdminPassword=123456                        ; 管理员密码
+scum.MaxPlayers=64                                ; 最大玩家数
+scum.ServerBannerUrl=                             ; 服务器横幅URL
+scum.ServerPlaystyle=PVP                          ; 游戏模式：PVP/PVE/PVP-E
+scum.WelcomeMessage=欢迎来到人渣服务器！         ; 进入游戏欢迎语
+scum.MessageOfTheDay=今日服务器稳定开放          ; 每日公告
+scum.MessageOfTheDayCooldown=10.0                ; 公告刷新间隔（分钟）
+scum.MinServerTickRate=5                          ; 服务器最小帧率
+scum.MaxServerTickRate=30                         ; 服务器最大帧率
+scum.MaxPing=200.0                                 ; 最大允许延迟（ms）
+scum.LogoutTimer=5.0                              ; 正常登出等待时间（分钟）
+scum.LogoutTimerWhileCaptured=2.0                 ; 被俘时登出等待时间（分钟）
+scum.AllowFirstPerson=True                        ; 允许第一人称
+scum.AllowThirdPerson=True                        ; 允许第三人称
+scum.AllowCrosshair=True                          ; 允许准星
+scum.AllowVoting=True                              ; 允许投票
+scum.AllowMapScreen=True                          ; 允许打开地图
+scum.AllowGlobalChat=True                          ; 允许全局聊天
+scum.AllowLocalChat=True                           ; 允许附近聊天
+scum.AllowSquadChat=True                           ; 允许小队聊天
+scum.MaxSquadSize=4                                ; 最大小队人数
+scum.LimitSquadMembers=False                       ; 是否限制小队人数
+scum.SquadMemberCountAtIntLvl1=2                  ; 智力1级小队人数
+scum.SquadMemberCountAtIntLvl2=3                  ; 智力2级小队人数
+scum.SquadMemberCountAtIntLvl3=4                  ; 智力3级小队人数
+scum.SquadMemberCountAtIntLvl4=5                  ; 智力4级小队人数
+scum.SquadMemberCountAtIntLvl5=6                  ; 智力5级小队人数
+
+;===================== 【游戏难度与倍率】=====================
+scum.Difficulty=2                                  ; 1简单/2普通/3困难
+scum.FamePointsMultiplier=1.0                      ; 声望获取倍率
+scum.ExperienceMultiplier=1.0                      ; 经验获取倍率
+scum.LootQuantityMultiplier=1.0                    ; 物资数量倍率
+scum.LootRespawnTime=120.0                         ; 物资刷新时间（分钟）
+scum.AmmoMultiplier=1.0                            ; 弹药倍率
+scum.WeaponDamageMultiplier=1.0                   ; 武器伤害倍率
+scum.PlayerDamageMultiplier=1.0                    ; 玩家受到伤害倍率
+scum.ZombieDamageMultiplier=1.0                    ; 僵尸伤害倍率
+scum.AnimalDamageMultiplier=1.0                    ; 动物伤害倍率
+scum.ShelterDamageMultiplier=1.0                   ; 建筑伤害倍率
+scum.VehicleDamageMultiplier=1.0                   ; 车辆伤害倍率
+
+;===================== 【玩家重生设置】=====================
+scum.AllowSectorRespawn=True                       ; 允许区域重生
+scum.AllowShelterRespawn=True                      ; 允许据点重生
+scum.AllowSuicideRespawn=True                       ; 允许自杀重生
+scum.RespawnTime=5.0                                ; 普通重生等待时间（分钟）
+scum.SectorRespawnPenaltyTime=10.0                  ; 区域重生惩罚时间
+scum.ShelterRespawnPenaltyTime=5.0                  ; 据点重生惩罚时间
+scum.CommitSuicideInitialTime=1.0                   ; 自杀初始等待时间
+scum.CommitSuicideCooldownTime=30.0                ; 自杀冷却时间
+scum.CommitSuicideCooldownResetMultiplier=1.0      ; 自杀冷却重置倍率
+
+;===================== 【AI与僵尸设置】=====================
+scum.bPuppetSpawnOnServer=True                      ; 开启僵尸生成
+scum.PuppetSpawnMultiplier=1.0                      ; 僵尸生成倍率
+scum.MaxPuppetsInWorld=500                          ; 世界最大僵尸数
+scum.bBanditsSpawnOnServer=True                     ; 开启土匪生成
+scum.BanditSpawnMultiplier=1.0                     ; 土匪生成倍率
+scum.MaxBanditsInWorld=50                           ; 世界最大土匪数
+scum.ArmedNPCLimpingEnabled=True                    ; 允许武装NPC跛行
+scum.MinimumDurabilityOfArmedNPCsDroppedItemFromHands=0.2 ; NPC掉落物品最小耐久
+scum.MaximumDurabilityOfArmedNPCsDroppedItemFromHands=0.3 ; NPC掉落物品最大耐久
+
+;===================== 【动物设置】=====================
+scum.MaxAllowedAnimalsInWorld=200                   ; 世界最大动物数
+scum.AnimalSpawnMultiplier=1.0                      ; 动物生成倍率
+scum.AnimalNetCullDistanceOverride=-1.0             ; 动物网络剔除距离
+scum.MaxAllowedHunts=20                             ; 最大狩猎数量
+scum.HuntFailureTime=150.0                          ; 狩猎失败时间
+scum.HuntFailureDistance=300.0                      ; 狩猎失败距离
+
+;===================== 【空投设置】=====================
+scum.CargoDropCooldownMinimum=90.0                  ; 空投最小冷却（分钟）
+scum.CargoDropCooldownMaximum=120.0                 ; 空投最大冷却（分钟）
+scum.CargoDropFallDelay=540.0                       ; 空投下落延迟（秒）
+scum.CargoDropFallDuration=60.0                     ; 空投下落持续时间（秒）
+scum.CargoDropSelfdestructTime=1200.0               ; 空投自毁时间（秒）
+
+;===================== 【载具设置（全车辆参数）】=====================
+[Vehicles]
+scum.LogVehicleDestroyed=True                       ; 记录车辆销毁日志
+scum.VehicleSpawnCount=1.0                           ; 全局车辆刷新倍率
+scum.VehicleRespawnDelay=120.0                      ; 车辆销毁后刷新时间（秒）
+scum.BatteryIdleDrainMultiplier=1.0                  ; 电池闲置耗电倍率
+scum.BatteryChargeWithAlternatorMultiplier=1.0     ; 发电机充电倍率
+scum.BatteryChargeWithDynamoMultiplier=1.0          ; 手摇充电倍率
+
+; 越野车（Laika）
+scum.LaikaMaxAmount=50                               ; 最大总数
+scum.LaikaMaxFunctionalAmount=20                     ; 最大完好数
+scum.LaikaMinPurchasedAmount=5                      ; 商店最小可购数
+
+; 越野摩托（Dirtbike）
+scum.DirtbikeMaxAmount=20
+scum.DirtbikeMaxFunctionalAmount=20
+scum.DirtbikeMinPurchasedAmount=5
+
+; 边三轮（SidecarBike）
+scum.SidecarBikeMaxAmount=25
+scum.SidecarBikeMaxFunctionalAmount=15
+scum.SidecarBikeMinPurchasedAmount=5
+
+; 小艇（Dinghy）
+scum.DinghyMaxAmount=14
+scum.DinghyMaxFunctionalAmount=14
+scum.DinghyMinPurchasedAmount=5
+
+; 摩托艇（Motorboat）
+scum.MotorboatMaxAmount=11
+scum.MotorboatMaxFunctionalAmount=11
+scum.MotorboatMinPurchasedAmount=0
+
+; 卡丁车（KingletDuster）
+scum.KingletDusterMaxAmount=2
+scum.KingletDusterMaxFunctionalAmount=2
+scum.KingletDusterMinPurchasedAmount=0
+
+; 自行车（Bicycle）
+scum.BicycleMaxAmount=20
+scum.BicycleMaxFunctionalAmount=20
+scum.BicycleMinPurchasedAmount=5
+
+; Rager（四驱车）
+scum.RagerMaxAmount=50
+scum.RagerMaxFunctionalAmount=20
+scum.RagerMinPurchasedAmount=5
+
+; Cruiser（巡航车）
+scum.CruiserMaxAmount=50
+scum.CruiserMaxFunctionalAmount=20
+scum.CruiserMinPurchasedAmount=5
+
+; RIS（皮卡）
+scum.RisMaxAmount=50
+scum.RisMaxFunctionalAmount=20
+scum.RisMinPurchasedAmount=5
+
+; SUP（冲浪板）
+scum.SUPMaxAmount=30
+scum.SUPMaxFunctionalAmount=20
+scum.SUPMinPurchasedAmount=5
+
+; 小船（KingletMariner）
+scum.KingletMarinerMaxAmount=1
+scum.KingletMarinerMaxFunctionalAmount=1
+scum.KingletMarinerMinPurchasedAmount=0
+
+;===================== 【建筑与领地设置】=====================
+scum.MaxBaseFlagsPerSquad=1                         ; 每小队最大领地旗数
+scum.AllowMultipleBaseFlags=False                    ; 允许多个领地旗
+scum.AllowBaseFlagsOnDZ=False                        ; 允许在D级区放领地旗
+scum.MaxWeaponRacksPerBaseFlag=2                    ; 每个领地旗最大武器架数
+scum.MaxFarmPlotsPerBaseFlag=10                     ; 每个领地旗最大菜地数
+scum.AllowWallsOnFoundations=True                    ; 允许在地基上放墙
+scum.AllowHalfWallsOnFoundations=True               ; 允许在地基上放半墙
+scum.AllowFullWallsOnHalfWalls=True                  ; 允许在半墙上放整墙
+scum.RaidProtectionEnabled=True                      ; 开启突袭保护
+scum.RaidProtectionTime=60.0                         ; 突袭保护时间（分钟）
+
+;===================== 【投票设置】=====================
+scum.PlayerMinimalVotingInterest=0.5                ; 投票所需在线玩家比例
+scum.PlayerPositiveVotePercentage=0.5               ; 通过所需同意票比例
+scum.VoteKickCooldown=30.0                           ; 踢人投票冷却时间
+scum.VoteBanCooldown=60.0                            ; 封禁投票冷却时间
+
+;===================== 【其他设置】=====================
+scum.EnableFog=True                                  ; 开启雾气
+scum.EncounterHTZRadiusMultiplier=1.0               ; 高威胁区域遭遇倍率
+scum.AbandonedBunkerBCUTerminalCooldown=24:00:00   ; 废弃地堡BCU冷却时间
+scum.MasterServerUpdateSendInterval=60               ; 主服务器更新间隔（秒）
+scum.MasterServerIsLocalTest=False                   ; 是否本地测试服务器
+scum.PartialWipe=False                                ; 部分重置（保留角色）

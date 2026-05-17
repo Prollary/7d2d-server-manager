@@ -1,0 +1,13 @@
+web:
+  host: "0.0.0.0"
+  port: 8888
+
+server:
+  dir: "D:\\project\\7d2d"
+  config_path: "D:\\project\\7d2d\\serverconfig.xml"
+  backup_dir: "D:\\project\\7d2d_backups"
+  saves_dir: ""
+
+rcon:
+  password: "admin123"
+  port: 8081

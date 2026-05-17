@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ServerSettings>
+    <property name="ServerName" value="Old Name"/>
+    <property name="ServerMaxAllowedPlayers" value="8"/>
+    <property name="PvPEnabled" value="false"/>
+    <property name="GameWorld" value="Navezgane"/>
+</ServerSettings>
