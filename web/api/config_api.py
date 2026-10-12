@@ -1,7 +1,7 @@
 import os
 import yaml
 import json
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from typing import Dict
 
@@ -36,20 +36,30 @@ def get_server_config():
     return {"properties": cfg.get_all_properties()}
 
 @router.post("/server")
-def save_server_config(body: Dict[str, str]):
+def save_server_config(request: Request, body: Dict[str, str]):
     """保存 serverconfig.xml 属性"""
     cfg = _cfg()
     if not cfg or cfg.root is None:
         raise HTTPException(400, "未加载 serverconfig.xml")
+        
+    role = getattr(request.state, "role", "user")
+    
     for key, value in body.items():
+        if key == "ServerMaxPlayerCount" and role != "admin":
+            continue # 忽略普通用户修改人数的请求，或抛出异常
         cfg.set_value(key, value)
+        
     if not cfg.save():
         raise HTTPException(500, "保存失败，请检查文件权限")
     return {"success": True, "message": "配置已保存"}
 
 @router.post("/hanize")
-def hanize_server_config():
+def hanize_server_config(request: Request):
     """配置文件汉化"""
+    role = getattr(request.state, "role", "user")
+    if role != "admin":
+        raise HTTPException(403, "只有超级管理员可以执行一键汉化")
+    
     cfg = _cfg()
     if not cfg or cfg.root is None:
         raise HTTPException(400, "未加载 serverconfig.xml")
@@ -97,7 +107,7 @@ class PathsBody(BaseModel):
     web_port:    int = 8888
 
 @router.post("/paths")
-def save_paths(body: PathsBody):
+def save_paths(request: Request, body: PathsBody):
     """保存系统路径配置 — 写入当前用户的专属配置文件"""
     from web.state import app_config, apply_paths
     app_config.setdefault("web", {})
@@ -246,3 +256,49 @@ def browse_server_fs(path: str = "", type: str = "dir"):
     except Exception as e:
         raise HTTPException(403, f"无权访问或出错: {e}")
 
+# ── CPU 配置 ──
+
+@router.get("/hardware")
+def get_hardware_config():
+    """获取 CPU 配置信息"""
+    from web.state import BASE_DIR
+    nat_file = os.path.join(BASE_DIR, "nat_config.json")
+    cpu = ""
+    if os.path.exists(nat_file):
+        try:
+            with open(nat_file, "r", encoding="utf-8") as f:
+                nat_cfg = json.load(f)
+            cpu = nat_cfg.get("CPU", "")
+        except Exception:
+            pass
+    return {"CPU": cpu}
+
+class CPUBody(BaseModel):
+    CPU: str = ""
+
+@router.post("/hardware")
+def save_hardware_config(request: Request, body: CPUBody):
+    """保存 CPU 配置（仅管理员）"""
+    role = getattr(request.state, "role", "user")
+    if role != "admin":
+        raise HTTPException(403, "只有超级管理员可以修改配置")
+
+    from web.state import BASE_DIR
+    nat_file = os.path.join(BASE_DIR, "nat_config.json")
+    nat_cfg = {}
+    if os.path.exists(nat_file):
+        try:
+            with open(nat_file, "r", encoding="utf-8") as f:
+                nat_cfg = json.load(f)
+        except Exception:
+            pass
+
+    nat_cfg["CPU"] = body.CPU
+
+    try:
+        with open(nat_file, "w", encoding="utf-8") as f:
+            json.dump(nat_cfg, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        raise HTTPException(500, f"保存配置失败: {e}")
+
+    return {"success": True, "message": "CPU 配置已保存！"}

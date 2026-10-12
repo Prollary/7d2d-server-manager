@@ -68,20 +68,20 @@ def _hash_pw(password: str, salt: str) -> str:
     ).hex()
 
 
-def _create_session(username: str) -> str:
+def _create_session(username: str, role: str = "user") -> str:
     """创建内存 session，不写入任何文件"""
     token = secrets.token_urlsafe(32)
-    _sessions[token] = {"username": username, "expires": time.time() + TOKEN_EXPIRY}
+    _sessions[token] = {"username": username, "role": role, "expires": time.time() + TOKEN_EXPIRY}
     return token
 
 
-def check_token(token: str) -> str | None:
-    """验证 token，有效返回用户名，否则返回 None"""
+def check_token(token: str) -> dict | None:
+    """验证 token，有效返回字典包含 username 和 role，否则返回 None"""
     if not token:
         return None
     s = _sessions.get(token)
     if s and s.get("expires", 0) > time.time():
-        return s["username"]
+        return {"username": s["username"], "role": s.get("role", "user")}
     # token 不存在或已过期，从内存中清除
     _sessions.pop(token, None)
     return None
@@ -106,6 +106,8 @@ def register(body: RegisterBody):
         raise HTTPException(400, "用户名至少 2 个字符")
     if len(body.password) < 6:
         raise HTTPException(400, "密码至少 6 位")
+    if name.lower() == "admin":
+        raise HTTPException(400, "不能注册管理员保留账号")
 
     users = _load_users()
     if any(u["username"] == name for u in users):
@@ -123,26 +125,32 @@ def register(body: RegisterBody):
     _save_users(users)
 
     token = _create_session(name)
-    return {"success": True, "token": token, "username": name}
+    return {"success": True, "token": token, "username": name, "role": "user"}
 
 
 @router.post("/login")
 def login(body: LoginBody):
+    # 管理员写死逻辑
+    if body.username == "admin" and body.password == "admin123":
+        os.makedirs(get_user_data_dir(body.username), exist_ok=True)
+        token = _create_session("admin", role="admin")
+        return {"success": True, "token": token, "username": "admin", "role": "admin"}
+        
     users = _load_users()
     user  = next((u for u in users if u["username"] == body.username), None)
     if not user or _hash_pw(body.password, user["salt"]) != user["password_hash"]:
         raise HTTPException(401, "用户名或密码错误")
     # 确保用户数据目录存在（可能是老用户首次用新版）
     os.makedirs(get_user_data_dir(body.username), exist_ok=True)
-    token = _create_session(body.username)
-    return {"success": True, "token": token, "username": body.username}
+    token = _create_session(body.username, role="user")
+    return {"success": True, "token": token, "username": body.username, "role": "user"}
 
 
 @router.get("/check")
 def check(token: str = ""):
-    username = check_token(token)
-    if username:
-        return {"valid": True, "username": username}
+    session_data = check_token(token)
+    if session_data:
+        return {"valid": True, "username": session_data["username"], "role": session_data["role"]}
     return {"valid": False}
 
 

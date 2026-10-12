@@ -22,6 +22,8 @@ const REGION_OPTIONS = [
 createApp({
   setup() {
 
+    const isAdminPage = window.location.pathname.startsWith('/admin');
+
     // ══════════════════════════════════════════
     //  应用状态：loading | auth | app
     // ══════════════════════════════════════════
@@ -32,24 +34,25 @@ createApp({
     const authError  = ref('');
     const authBusy   = ref(false);
     const currentUser= ref('');
+    const currentUserRole = ref('user');
     const authToken  = ref('');
     const usersFile  = ref('');
 
-    function setToken(token, username) {
-      // 仅保存在内存，不写 localStorage — 刷新页面即失效
+    function setToken(token, username, role) {
       authToken.value = token;
       currentUser.value = username;
+      currentUserRole.value = role;
       api.defaults.headers.common['X-Auth-Token'] = token;
     }
 
     function clearToken() {
       authToken.value = '';
       currentUser.value = '';
+      currentUserRole.value = 'user';
       delete api.defaults.headers.common['X-Auth-Token'];
     }
 
     async function checkAuth() {
-      // 每次页面加载均直接显示登录框，不自动恢复 session
       appState.value = 'auth';
     }
 
@@ -60,7 +63,14 @@ createApp({
         const body = { username: authUser.value.trim(), password: authPass.value };
         const url  = authMode.value === 'login' ? '/api/auth/login' : '/api/auth/register';
         const { data } = await axios.post(url, body);
-        setToken(data.token, data.username);
+        
+        // 权限校验拦截：/admin 页面仅管理员可登录
+        if (isAdminPage && data.role !== 'admin') {
+            authError.value = '只有管理员账号可以登录此后台';
+            return;
+        }
+        
+        setToken(data.token, data.username, data.role);
         appState.value = 'app';
         onAppReady();
       } catch (e) {
@@ -91,39 +101,42 @@ createApp({
     const page = ref('dashboard');
     const sidebarOpen = ref(false);
 
-    // 移动端底部导航快捷项
-    const bottomTabs = [
-      { id: 'dashboard', icon: '⬛', label: '控制台' },
-      { id: 'players',   icon: '👥', label: '玩家' },
-      { id: 'worlds',    icon: '🗺',  label: '地图' },
-      { id: 'mods',      icon: '🔧', label: '模组' },
-      { id: 'sysconfig', icon: '🔩', label: '设置' },
-    ];
+    const bottomTabs = computed(() => {
+      return [
+        { id: 'dashboard',  icon: '⬛', label: '控制台' },
+        { id: 'players',    icon: '👥', label: '玩家' },
+        { id: 'worlds',     icon: '🗺', label: '地图' },
+        { id: 'mods',       icon: '🔧', label: '模组' },
+        { id: 'sysconfig',  icon: '🔩', label: '设置' },
+      ];
+    });
 
-    const navGroups = [
-      {
-        label: '服务管理',
-        items: [
-          { id: 'dashboard', label: '服务器控制台', icon: '⬛' },
-          { id: 'players',   label: '玩家管理',     icon: '👥' },
-        ],
-      },
-      {
-        label: '内容管理',
-        items: [
-          { id: 'mods',   label: '模组管理', icon: '🔧' },
-          { id: 'worlds', label: '地图管理', icon: '🗺' },
-        ],
-      },
-      {
-        label: '配置',
-        items: [
-          { id: 'settings',  label: '服务器设置', icon: '⚙' },
-          { id: 'tools',     label: '辅助工具',   icon: '🛠' },
-          { id: 'sysconfig', label: '系统设置',   icon: '🔩' },
-        ],
-      },
-    ];
+    const navGroups = computed(() => {
+      return [
+        {
+          label: '服务管理',
+          items: [
+            { id: 'dashboard',  label: '服务器控制台', icon: '⬛' },
+            { id: 'players',    label: '玩家管理',     icon: '👥' },
+          ],
+        },
+        {
+          label: '内容管理',
+          items: [
+            { id: 'mods',   label: '模组管理', icon: '🔧' },
+            { id: 'worlds', label: '地图管理', icon: '🗺' },
+          ],
+        },
+        {
+          label: '配置',
+          items: [
+            { id: 'settings',  label: '服务器设置', icon: '⚙' },
+            { id: 'tools',     label: '辅助工具',   icon: '🛠' },
+            { id: 'sysconfig', label: '系统设置',   icon: '🔩' },
+          ],
+        },
+      ];
+    });
 
     function switchPage(p) {
       page.value = p;
@@ -490,11 +503,41 @@ createApp({
     }
 
     // ══════════════════════════════════════════
+    //  CPU 配置信息
+    // ══════════════════════════════════════════
+    const cpuInfo = ref('');
+    const cpuEditing = ref(false);
+    const cpuDraft = ref('');
+
+    async function fetchCpuInfo() {
+      try {
+        const { data } = await api.get('/api/config/hardware');
+        cpuInfo.value = data.CPU || '';
+      } catch {}
+    }
+    async function saveCpuInfo() {
+      try {
+        const { data } = await api.post('/api/config/hardware', { CPU: cpuDraft.value });
+        cpuInfo.value = cpuDraft.value;
+        cpuEditing.value = false;
+        toast(data.message, 'success');
+      } catch (e) { toast(e.response?.data?.detail || '保存失败', 'error'); }
+    }
+    function startCpuEdit() {
+      cpuDraft.value = cpuInfo.value;
+      cpuEditing.value = true;
+    }
+    function cancelCpuEdit() {
+      cpuEditing.value = false;
+    }
+
+    // ══════════════════════════════════════════
     //  初始化
     // ══════════════════════════════════════════
     function onAppReady() {
       fetchStatus();
       fetchSnapshots();
+      fetchCpuInfo();
       connectSSE();
       statusInterval = setInterval(fetchStatus, 5000);
     }
@@ -512,11 +555,11 @@ createApp({
 
     return {
       // auth
-      appState, authMode, authUser, authPass, authError, authBusy, currentUser, usersFile,
+      appState, authMode, authUser, authPass, authError, authBusy, currentUser, currentUserRole, usersFile,
       doAuth, logout, fetchUsersFile,
       // nav
       page, navGroups, bottomTabs, sidebarOpen, switchPage,
-      REGION_OPTIONS,
+      REGION_OPTIONS, isAdminPage,
       // toast / modal
       toasts, modal, closeModal, confirmModal,
       // server
@@ -542,6 +585,9 @@ createApp({
       portResults, fwResults, checkPorts, openFirewall,
       // sysconfig
       sysPaths, autoSearching, fetchSysPaths, saveSysPaths, autoSearch, installServer,
+      // cpu info
+      cpuInfo, cpuEditing, cpuDraft,
+      fetchCpuInfo, saveCpuInfo, startCpuEdit, cancelCpuEdit,
     };
   },
 
@@ -567,7 +613,7 @@ createApp({
 
     <div class="auth-tabs">
       <button class="auth-tab" :class="{active:authMode==='login'}"    @click="authMode='login';authError=''">登录</button>
-      <button class="auth-tab" :class="{active:authMode==='register'}" @click="authMode='register';authError=''">注册</button>
+      <button v-if="!isAdminPage" class="auth-tab" :class="{active:authMode==='register'}" @click="authMode='register';authError=''">注册</button>
     </div>
 
     <div v-if="authError" class="auth-error">{{ authError }}</div>
@@ -626,6 +672,22 @@ createApp({
       </div>
     </div>
 
+    <!-- CPU 配置展示 -->
+    <div style="padding: 4px 16px; margin: 4px 0 10px; font-size: 13px; color: var(--subtext); display: flex; align-items: center;">
+      <div style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px;">
+        <span style="font-weight: 500; white-space: nowrap;">CPU:</span>
+        <span v-if="!cpuEditing" style="color: var(--text); font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" :title="cpuInfo || '未配置'">
+          {{ cpuInfo || '未配置' }}
+        </span>
+        <div v-else style="display: flex; gap: 4px; align-items: center; width: 100%;">
+          <input type="text" class="form-input" v-model="cpuDraft" placeholder="例: 9950X" style="font-size: 12px; padding: 2px 6px; height: 24px; flex: 1; background: var(--surface); border: 1px solid var(--border); color: var(--text);" />
+          <button class="btn btn-green btn-xs" style="padding: 2px 6px; height: 24px;" @click="saveCpuInfo">✔</button>
+          <button class="btn btn-ghost btn-xs" style="padding: 2px 6px; height: 24px;" @click="cancelCpuEdit">✖</button>
+        </div>
+      </div>
+      <button v-if="isAdminPage && !cpuEditing" class="btn btn-ghost btn-xs" style="padding: 2px; color: var(--primary); margin-left: auto;" @click="startCpuEdit" title="修改 CPU">✏</button>
+    </div>
+
     <nav class="sidebar-nav">
       <template v-for="g in navGroups" :key="g.label">
         <div class="nav-section-label">{{ g.label }}</div>
@@ -678,7 +740,7 @@ createApp({
       </div>
 
       <!-- 工具行 -->
-      <div class="toolbar">
+      <div class="toolbar" style="margin-bottom: 12px;">
         <button class="btn btn-purple btn-sm" @click="detectCrash">🔍 AI崩溃检测</button>
         <span style="color:var(--subtext);font-size:12px;">回档：</span>
         <button v-for="(label,tag) in ROLLBACK_LABELS" :key="tag" class="btn btn-ghost btn-sm" @click="doRollback(tag)"
@@ -813,8 +875,8 @@ createApp({
         <div class="form-grid">
           <template v-for="f in FIELD_DEFS" :key="f.key">
             <div class="form-group">
-              <label class="form-label">{{ f.label }}</label>
-              <input v-if="f.type==='text'||f.type==='number'" :type="f.type" class="form-input" v-model="serverConfig[f.key]" :min="f.min" :max="f.max" />
+              <label class="form-label">{{ f.label }}<span v-if="f.key==='ServerMaxPlayerCount' && !isAdminPage" style="font-size:10px;color:var(--subtext);margin-left:4px;">(管理员可改)</span></label>
+              <input v-if="f.type==='text'||f.type==='number'" :type="f.type" class="form-input" v-model="serverConfig[f.key]" :min="f.min" :max="f.max" :disabled="f.key==='ServerMaxPlayerCount' && !isAdminPage" />
               <select v-else-if="f.type==='select'" class="form-select" v-model="serverConfig[f.key]">
                 <option v-for="(o,i) in f.options" :key="o" :value="o">{{ f.labels[i] }}</option>
               </select>
@@ -870,7 +932,7 @@ createApp({
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="card-title">路径配置</span></div>
+        <div class="card-header"><span class="card-title">系统配置</span></div>
         <div class="form-grid single" style="gap:14px;">
           <div class="form-group">
             <label class="form-label">服务端目录</label>
@@ -904,12 +966,14 @@ createApp({
       <div class="card">
         <div class="card-header"><span class="card-title">账号管理</span></div>
         <p style="color:var(--subtext);font-size:13px;line-height:1.7;">
-          当前登录账号：<strong style="color:var(--text);">{{ currentUser }}</strong><br>
-          忘记密码：删除以下 <code style="color:var(--yellow);">users.json</code> 文件后刷新页面即可重新注册（用户配置同步清除）：<br>
-          <code style="color:var(--accent);font-size:12px;word-break:break-all;">{{ usersFile || '（点击「刷新路径」加载）' }}</code>
+          当前登录账号：<strong style="color:var(--text);">{{ currentUser }}</strong> （角色：{{ currentUserRole === 'admin' ? '超级管理员' : '服主' }}）<br>
+          <span v-if="isAdminPage">
+            忘记密码：删除以下 <code style="color:var(--yellow);">users.json</code> 文件后刷新页面即可重新注册（用户配置同步清除）：<br>
+            <code style="color:var(--accent);font-size:12px;word-break:break-all;">{{ usersFile || '（点击「刷新路径」加载）' }}</code>
+          </span>
         </p>
         <div class="toolbar" style="margin-top:12px;">
-          <button class="btn btn-ghost btn-sm" @click="fetchUsersFile">刷新路径</button>
+          <button v-if="isAdminPage" class="btn btn-ghost btn-sm" @click="fetchUsersFile">刷新路径</button>
           <button class="btn btn-red btn-sm" @click="logout">退出登录</button>
         </div>
       </div>

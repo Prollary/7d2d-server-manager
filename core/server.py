@@ -61,6 +61,46 @@ class ServerController:
             self._emit("错误：未找到服务端可执行文件。")
             return False
 
+        # --- 注入 NAT 外网配置 ---
+        try:
+            import json, sys
+            import xml.etree.ElementTree as ET
+            
+            # 定位 nat_config.json
+            if getattr(sys, 'frozen', False):
+                base_dir = os.path.dirname(sys.executable)
+            else:
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            
+            nat_file = os.path.join(base_dir, "nat_config.json")
+            if os.path.exists(nat_file) and os.path.exists(self.config_path):
+                with open(nat_file, "r", encoding="utf-8") as f:
+                    nat_cfg = json.load(f)
+                
+                pub_ip = nat_cfg.get("GamePublicIP", "").strip()
+                server_port = nat_cfg.get("ServerPort")
+                
+                # 更新 XML
+                tree = ET.parse(self.config_path)
+                root = tree.getroot()
+                changed = False
+                
+                for prop in root.findall("property"):
+                    name = prop.get("name")
+                    if name == "ServerIP" and pub_ip:
+                        prop.set("value", pub_ip)
+                        changed = True
+                    elif name == "ServerPort" and server_port:
+                        prop.set("value", str(server_port))
+                        changed = True
+                        
+                if changed:
+                    tree.write(self.config_path, encoding="utf-8", xml_declaration=True)
+                    self._emit(f"[*] 已应用 NAT 外部配置：IP={pub_ip or '默认'}, 端口={server_port or '默认'}")
+        except Exception as e:
+            self._emit(f"[!] 应用 NAT 外部配置失败：{e}")
+        # -----------------------------
+
         self._log_file = os.path.join(self.server_dir, "output_log.txt")
         cmd = [exe, f"-configfile={self.config_path}",
                "-logfile", "output_log.txt",

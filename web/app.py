@@ -58,6 +58,7 @@ def _setup_logging():
 _log = logging.getLogger("platform")
 
 # ═══════════════════════════════════════════════════════════
+import json
 import yaml
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
@@ -84,14 +85,19 @@ _PUBLIC = ("/api/auth/", "/static/", "/favicon")
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         path = request.url.path
-        if path == "/" or any(path.startswith(p) for p in _PUBLIC):
+        if path == "/" or path == "/admin" or any(path.startswith(p) for p in _PUBLIC):
             return await call_next(request)
         token = (request.headers.get("X-Auth-Token") or
                  request.query_params.get("token") or "")
         from web.api.auth import check_token
-        username = check_token(token)
-        if not username:
+        session_data = check_token(token)
+        if not session_data:
             return JSONResponse({"detail": "请先登录"}, status_code=401)
+        
+        username = session_data["username"]
+        role = session_data["role"]
+        
+        request.state.role = role
         import web.state as _state
         if _state._current_user != username:
             try:
@@ -126,9 +132,24 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 def index():
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
+@app.get("/admin")
+def admin_index():
+    return FileResponse(os.path.join(STATIC_DIR, "admin.html"))
+
 # ── 配置加载 ──
 def _load_config():
     from web.state import init_state
+    
+    nat_config_path = os.path.join(BASE_DIR, "nat_config.json")
+    if not os.path.exists(nat_config_path):
+        default_nat = {
+            "GamePublicIP": "",
+            "ServerPort": 26900,
+            "HardwareSpec": "标准型服务器"
+        }
+        with open(nat_config_path, "w", encoding="utf-8") as f:
+            json.dump(default_nat, f, indent=4)
+            
     init_state({})
 
 # ═══════════════════════════════════════════════════════════
