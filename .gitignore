@@ -1,3 +1,5 @@
+# ===== Flash / Flex / AIR =====
+
 # Build and Release Folders
 bin-debug/
 bin-release/
@@ -16,3 +18,59 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+# 因此以下文件不要加入忽略：
+# .project
+# .actionScriptProperties
+# .flexProperties
+
+
+# ===== Python =====
+
+# Python 虚拟环境
+venv/
+.venv/
+env/
+ENV/
+
+# 构建输出
+dist/
+build/
+*.exe
+
+# 其他常见忽略项
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Python 测试与覆盖率
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Python 打包
+*.egg-info/
+.eggs/
+
+# 环境变量文件
+.env
+.env.*
+!.env.example
+
+
+# ===== IDE / 编辑器 =====
+
+.idea/
+.vscode/
+*.iml
+
+
+# ===== 操作系统 =====
+
+.DS_Store
+Thumbs.db
+
+
